@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { addEdge, applyNodeChanges, applyEdgeChanges } from "reactflow";
-
+import random from 'random'
 const savedNodes = localStorage.getItem("nodes");
 const savedEdges = localStorage.getItem("edges");
 
@@ -43,10 +43,10 @@ const useStore = create((set, get) => ({
   addNode: () => {
     const newNodes = [...get().nodes];
     const newNode = {
-      id: `${Math.floor(Math.random() * 10)}`,
+      id: `${random.int(0, 100)}`,
       type: "custom",
-      data: { label: "New Node" },
-      position: { x: 100 + Math.floor(Math.random() * 50), y: 100 + Math.floor(Math.random() * 30) },
+      data: { label: `New Node ${random.int(0, 100)}`},
+      position: { x: random.int(50, 200), y:  random.int(50, 200) },
     };
     newNodes.push(newNode);
     set({ nodes: newNodes });

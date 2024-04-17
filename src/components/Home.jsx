@@ -28,7 +28,7 @@ const nodeTypes = {
 const Home = () => {
   const [id, setId] = useState("");
   const [label, setLabel] = useState("");
-  // const [clicked, setClicked] = useState(false);
+ 
   const {
     nodes,
     edges,
