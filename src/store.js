@@ -46,7 +46,7 @@ const useStore = create((set, get) => ({
       id: `${random.int(0, 100)}`,
       type: "custom",
       data: { label: `New Node ${random.int(0, 100)}`},
-      position: { x: random.int(50, 200), y:  random.int(50, 200) },
+      position: { x: random.int(0, 100), y:  random.int(0, 100) },
     };
     newNodes.push(newNode);
     set({ nodes: newNodes });

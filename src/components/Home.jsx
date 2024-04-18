@@ -1,8 +1,4 @@
-import ReactFlow, {
-  Background,
-  Controls,
-  Panel
-} from "reactflow";
+import ReactFlow, { Background, Controls, Panel } from "reactflow";
 import "reactflow/dist/style.css";
 import useStore from "../store";
 import { useShallow } from "zustand/react/shallow";
@@ -17,7 +13,7 @@ const selector = (state) => ({
   addNode: state.addNode,
   setNodes: state.setNodes,
   clicked: state.clicked,
-  setClicked: state.setClicked
+  setClicked: state.setClicked,
 });
 const nodeTypes = {
   custom: CustomNode,
@@ -28,7 +24,7 @@ const nodeTypes = {
 const Home = () => {
   const [id, setId] = useState("");
   const [label, setLabel] = useState("");
- 
+
   const {
     nodes,
     edges,
@@ -38,7 +34,7 @@ const Home = () => {
     onConnect,
     addNode,
     clicked,
-    setClicked
+    setClicked,
   } = useStore(useShallow(selector));
   const handleAdd = () => {
     addNode();
@@ -48,12 +44,9 @@ const Home = () => {
     localStorage.clear();
     window.location.reload();
   };
-  
-  const onNodeClick = (_, node) => {
-    setClicked(true)
-    setLabel(node.data.label);
-    setId(node.id);
-    
+
+  const onNodeClick = () => {
+    setClicked(false);
   };
   const handleUpdate = () => {
     setNodes(
@@ -71,11 +64,19 @@ const Home = () => {
       })
     );
   };
- const handleDel = () => {
-  const filterNodes = nodes.filter((node) => node.id != id);
-  setNodes(filterNodes);
-  setClicked(false)
- } 
+  const handleDel = () => {
+    const filterNodes = nodes.filter((node) => node.id != id);
+    setNodes(filterNodes);
+    setClicked(false);
+  };
+
+  const onNodeDoubleClick = (_, node) => {
+    setClicked(true);
+    setId(node.id);
+    setLabel(node.data.label);
+  };
+
+  
   return (
     <div style={{ height: "100vh", position: "relative" }}>
       <ReactFlow
@@ -87,93 +88,90 @@ const Home = () => {
         onConnect={onConnect}
         onNodesDelete={(nodes) => onNodesChange(nodes)}
         onNodeClick={onNodeClick}
+        onNodeDoubleClick={onNodeDoubleClick}
         fitView
       >
         <Background />
-        {
-          
-          clicked && (
-            <Panel
+        {clicked && (
+          <Panel
+            style={{
+              borderRadius: "16px",
+              height: "400px",
+              width: "300px",
+              justifyContent: "center",
+              flexDirection: "column",
+              alignItems: "center",
+              backgroundColor: "yellow",
+              position: "absolute",
+              right: 0,
+              top: 200,
+            }}
+          >
+            <div
               style={{
-                borderRadius: "16px",
+                rowGap: "20px",
+                columnGap: "50px",
                 height: "400px",
                 width: "300px",
-                justifyContent: "center",
+                display: "flex",
                 flexDirection: "column",
+                justifyContent: "center",
                 alignItems: "center",
-                backgroundColor: "yellow",
-                position: "absolute",
-                right: 0,
-                top: 200,
               }}
             >
-              <div
+              <input
+                onChange={(e) => setLabel(e.target.value)}
                 style={{
-                  rowGap: "20px",
-                  columnGap: "50px",
-                  height: "400px",
-                  width: "300px",
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: "center",
+                  height: "40px",
+                  width: "250px",
+                  border: "none",
+                  borderRadius: "4px",
+                  paddingLeft: "16px",
+                  outlineColor: "red",
                 }}
+                value={label}
+                type="text"
+                placeholder=""
+              />
+              <button
+                style={{
+                  cursor: "pointer",
+                  height: "30px",
+                  width: "270px",
+                  color: "white",
+                  backgroundColor: "#041E49",
+                }}
+                onClick={handleUpdate}
               >
-                <input
-                  onChange={(e) => setLabel(e.target.value)}
-                  style={{
-                    height: "40px",
-                    width: "250px",
-                    border: "none",
-                    borderRadius: "4px",
-                    paddingLeft: "16px",
-                    outlineColor: "red",
-                  }}
-                  value={label}
-                  type="text"
-                  placeholder=""
-                />
-                <button
-                  style={{
-                    cursor: "pointer",
-                    height: "30px",
-                    width: "270px",
-                    color: "white",
-                    backgroundColor: "#041E49",
-                  }}
-                  onClick={handleUpdate}
-                >
-                  update
-                </button>
-                <button
-                  style={{
-                    cursor: "pointer",
-                    height: "30px",
-                    width: "270px",
-                    color: "white",
-                    backgroundColor: "#041E49",
-                  }}
-                  onClick={handleDel}
-                >
-                  delete
-                </button>
-                <button
-                  style={{
-                    cursor: "pointer",
-                    height: "30px",
-                    width: "270px",
-                    color: "white",
-                    backgroundColor: "#041E49",
-                  }}
-                  onClick={() => setClicked(false)}
-                >
-                  close
-                </button>
-                
-              </div>
-            </Panel>
-          )
-        }
+                update
+              </button>
+              <button
+                style={{
+                  cursor: "pointer",
+                  height: "30px",
+                  width: "270px",
+                  color: "white",
+                  backgroundColor: "#041E49",
+                }}
+                onClick={handleDel}
+              >
+                delete
+              </button>
+              <button
+                style={{
+                  cursor: "pointer",
+                  height: "30px",
+                  width: "270px",
+                  color: "white",
+                  backgroundColor: "#041E49",
+                }}
+                onClick={() => setClicked(false)}
+              >
+                close
+              </button>
+            </div>
+          </Panel>
+        )}
         <Panel
           onClick={handleAdd}
           style={{
