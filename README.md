@@ -1,5 +1,2 @@
-[live](https://mean-doors-mix.loca.lt/) 
+[live](https://shivom007.github.io/interactly-task/) 
 
-```
-password : 103.215.237.233
-```
